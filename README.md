@@ -1,4 +1,4 @@
-"Characterizing photometry from the Roman OpenUniverse High Latitude Time-Domain Survey simulations"
+"Initial Characterization of Photometry of High-Latitude Time Domain Survey _Roman_ images from the OpenUniverse Simulations"
 Aldoroty, L.; Scolnic, D.; Kannawadi, A.; Troxel, M. and the Roman Supernova Project Infrastructure Team 2025.
 
 * generate_gridded_psfs.py: Generates the PSFs used in the above work. 
