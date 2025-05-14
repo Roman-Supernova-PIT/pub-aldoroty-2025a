@@ -122,9 +122,9 @@ def flipY(sca):
         return slice(None, None, 1)
 
 
-def load_all_data(band, usecols):
+def load_all_data(band, usecols, oversampling, path):
     # data_array = [np.loadtxt(f"roman_psf_bp/{band}_{sca}.txt", delimiter=",")[:,0].reshape(6,6).T[:,::-1] for sca in range(1, 19)]
-    data_array = [np.loadtxt(f"roman_psf_bp/{band}_{sca}_8.0x.txt", delimiter=",", usecols=usecols).reshape(6,6).T[::-1,:][flipX(sca),flipY(sca)] for sca in range(1, 19)]
+    data_array = [np.loadtxt(f"{path}/{band}_{sca}_{oversampling}x.txt", delimiter=",", usecols=usecols).reshape(6,6).T[::-1,:][flipX(sca),flipY(sca)] for sca in range(1, 19)]
     data_array = np.array(data_array)
     if usecols == 2:
         data_array *= SIGMA2FWHM*0.11
@@ -148,6 +148,7 @@ def determine_vlims(data_array, usecols):
 
 def main():
     parser = argparse.ArgumentParser("Roman PSF plotting on the Focal Plane")
+    parser.add_argument("--path", type=str, required=True, help="Path to the folder containing the data")
     parser.add_argument("--band", type=str, required=True, help="Name of the bandpass")
     parser.add_argument("--usecols", type=int, required=True,
                         help="The column number to plot. See roman_psf_fp.py. "
@@ -155,13 +156,16 @@ def main():
                         )
     parser.add_argument("--clabel", type=str, required=False,
                         default=r"PSF FWHM [arcsec]", help="Label on the color bar")
+    parser.add_argument("--oversampling", type=float, required=False, default=8.0, help="Oversampling factor")
     args = parser.parse_args()
 
+    path = args.path
     band = args.band
     usecols = int(args.usecols)
-
     clabel = args.clabel
-    data_array = load_all_data(band=band, usecols=usecols)
+    oversampling = float(args.oversampling)
+
+    data_array = load_all_data(band=band, usecols=usecols, oversampling=oversampling, path=path)
     vlims = determine_vlims(data_array, usecols)
 
     roman_sca_plot(
