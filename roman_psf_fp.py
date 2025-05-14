@@ -17,6 +17,7 @@ parser.add_argument("--step", type=int, default=800, required=False,
 args = parser.parse_args()
 bp_name = args.band
 SCA = int(args.SCA)
+step = int(args.step)
 
 oversampling_factor = float(args.oversampling)
 n_waves = None
@@ -26,7 +27,6 @@ bp = bp_dict[bp_name]
 
 chromatic_psf = galsim.roman.getPSF(SCA=SCA, bandpass=bp_name, n_waves=n_waves, SCA_pos=galsim._PositionD(4088, 4088))
 
-step = 800
 size_list, e1_list, e2_list = [], [], []
 x_list, y_list = [], []
 aber_list = []
