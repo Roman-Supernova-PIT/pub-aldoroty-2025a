@@ -21,7 +21,7 @@ x, y = [2044., 2044.]
 galsim_psf_paths = [f'example_galsim_psfs/testpsf_{b}_{s}.fits' for b in imgdetails['band'] for s in scas]
 
 def alpha_func(x, y):
-    return (x-y)/(x+y)
+    return abs(x-y)/(x+y)
 
 asymmetry_indices = {band: [] for band in get_roman_bands()}
 ellipticity = {f'{band}_{e}': [] for band in get_roman_bands() for e in ['e1', 'e2']}
@@ -87,10 +87,9 @@ for band, pointing in zip(imgdetails['band'], imgdetails['pointing']):
         for i in [0, 1]:
             for j in [0, 1]:
                 xy = (cutout_centers[i], cutout_centers[j])
-                cutout = Cutout2D(img, xy, cutout_size)
+                cutout = Cutout2D(img, xy, cutout_size, limit_rounding_method=np.round)
                 cutout_sums.append(np.nansum(cutout.data))
-    
-        
+      
         sum_alph = 0
         iterable = list(combinations(cutout_sums,2))
         for pair in iterable:
